@@ -1,0 +1,13 @@
+
+  Migration name .............................................. Batch / Status  
+  0001_01_01_000000_create_users_table ............................... [1] Ran  
+  0001_01_01_000001_create_cache_table ............................... [1] Ran  
+  0001_01_01_000002_create_jobs_table ................................ [1] Ran  
+  2025_12_11_064028_create_personal_access_tokens_table .............. [1] Ran  
+  2025_12_11_101412_create_blood_groups_table ........................ [1] Ran  
+  2025_12_11_101835_create_table_order ............................... [1] Ran  
+  2025_12_11_132143_create_doners_table .............................. [1] Ran  
+  2025_12_11_132315_create_blood_orders_table ........................ [1] Ran  
+  2025_12_11_133125_create_order_matches_table ....................... [1] Ran  
+  2025_12_11_133233_create_blood_reports_table ....................... [1] Ran  
+

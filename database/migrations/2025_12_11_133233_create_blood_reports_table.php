@@ -21,7 +21,7 @@ return new class extends Migration
         $table->float('mcv');
         $table->float('platelets');
         $table->timestamp('created_at')->useCurrent();
-
+        $table->foreignId('blood_group_id')->constrained('blood_groups')->cascadeOnDelete();
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     });
 }

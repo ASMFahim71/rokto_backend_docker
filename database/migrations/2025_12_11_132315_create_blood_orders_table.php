@@ -13,9 +13,8 @@ return new class extends Migration
 {
     Schema::create('blood_orders', function (Blueprint $table) {
         $table->id('order_id');
-        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-        $table->unsignedBigInteger('requester_id');
-        $table->unsignedBigInteger('blood_group_id');
+        $table->foreignId('requester_id')->constrained('users')->onDelete('cascade');
+        $table->foreignId('blood_group_id')->constrained('blood_groups')->onDelete('cascade');
         $table->date('date');
         $table->time('time');
         $table->text('cause');
