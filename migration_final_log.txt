@@ -1,0 +1,41 @@
+
+  Dropping all tables ........................................... 31.42ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ...................................... 25.32ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table ......................... 148.52ms DONE
+  0001_01_01_000001_create_cache_table .......................... 45.67ms DONE
+  0001_01_01_000002_create_jobs_table .......................... 111.57ms DONE
+  2025_12_11_064028_create_personal_access_tokens_table ......... 64.38ms DONE
+  2025_12_11_101412_create_blood_groups_table .................. 109.32ms DONE
+  2025_12_11_101835_create_table_order .......................... 19.05ms DONE
+  2025_12_11_132143_create_doners_table ......................... 72.76ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000]: General error: 3734 Failed to add the foreign key constraint. Missing column 'id' for constraint 'donors_blood_group_id_foreign' in the referenced table 'blood_groups' (Connection: mysql, SQL: alter table `donors` add constraint `donors_blood_group_id_foreign` foreign key (`blood_group_id`) references `blood_groups` (`id`) on delete cascade)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:826
+    822▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    823▕                 );
+    824▕             }
+    825▕ 
+  ➜ 826▕             throw new QueryException(
+    827▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    828▕             );
+    829▕         }
+    830▕     }
+
+      [2m+9 vendor frames [22m
+
+  10  database/migrations/2025_12_11_132143_create_doners_table.php:14
+      Illuminate\Support\Facades\Facade::__callStatic()
+      [2m+37 vendor frames [22m
+
+  48  artisan:16
+      Illuminate\Foundation\Application::handleCommand()
+

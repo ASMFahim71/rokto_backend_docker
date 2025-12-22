@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('blood_groups', function (Blueprint $table) {
-            $table->id('blood_group_id');
+            $table->id();
             $table->string('blood_group_name');
             $table->timestamps();
 

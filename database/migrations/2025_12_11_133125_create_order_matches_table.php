@@ -18,7 +18,7 @@ return new class extends Migration
         $table->enum('status', ['pending', 'accepted', 'rejected', 'completed'])->default('pending');
         $table->timestamp('matched_at')->nullable();
         $table->timestamps();
-
+        $table->foreignId('blood_group_id')->constrained('blood_groups')->cascadeOnDelete();
         $table->foreign('order_id')->references('order_id')->on('blood_orders')->onDelete('cascade');
         $table->foreign('donor_id')->references('donor_id')->on('donors')->onDelete('cascade');
     });
