@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('phone')->unique();
             $table->string('password');
-            $table->text('present_address')->nullable();
-            $table->text('permanent_address')->nullable();
-            $table->float('latitude')->nullable();
-            $table->float('longitude')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
+            $table->foreignId('division_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('district_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('upazila_id')->nullable()->constrained()->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

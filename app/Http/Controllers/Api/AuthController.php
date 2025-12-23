@@ -18,6 +18,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+
+
         $user = User::create($validated);
 
         $token = $user->createToken('auth-token')->plainTextToken;

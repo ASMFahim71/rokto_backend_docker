@@ -17,11 +17,21 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        try {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'phone' => '01700000000',
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
-        $this->call(BloodGroupsSeeder::class);
+        $this->call([
+            BloodGroupsSeeder::class,
+            DivisionSeeder::class,
+            DistrictSeeder::class,
+            ThanaSeeder::class,
+        ]);
     }
 }
