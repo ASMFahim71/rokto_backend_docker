@@ -1,0 +1,31 @@
+
+   INFO  Nothing to rollback.  
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table ........................... 6.61ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'users' already exists (Connection: mysql, SQL: create table `users` (`id` bigint unsigned not null auto_increment primary key, `name` varchar(255) not null, `email` varchar(255) not null, `phone` varchar(255) not null, `password` varchar(255) not null, `blood_group_id` bigint unsigned not null, `present_address` text null, `permanent_address` text null, `latitude` float(53) null, `longitude` float(53) null, `remember_token` varchar(100) null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:826
+    822▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    823▕                 );
+    824▕             }
+    825▕ 
+  ➜ 826▕             throw new QueryException(
+    827▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    828▕             );
+    829▕         }
+    830▕     }
+
+      [2m+9 vendor frames [22m
+
+  10  database/migrations/0001_01_01_000000_create_users_table.php:14
+      Illuminate\Support\Facades\Facade::__callStatic()
+      [2m+37 vendor frames [22m
+
+  48  artisan:16
+      Illuminate\Foundation\Application::handleCommand()
+

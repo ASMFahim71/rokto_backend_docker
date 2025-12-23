@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('donors', function (Blueprint $table) {
         $table->id('donor_id');
         $table->unsignedBigInteger('user_id')->unique();
+        $table->foreignId('blood_group_id')->constrained('blood_groups')->cascadeOnDelete();
         $table->date('last_donation_date')->nullable();
         $table->integer('donation_count')->default(0);
         $table->float('rating')->default(0);
