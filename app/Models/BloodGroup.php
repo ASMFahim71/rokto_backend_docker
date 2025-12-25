@@ -10,7 +10,7 @@ class BloodGroup extends Model
     use HasFactory;
 
     protected $table = 'blood_groups';
-    protected $primaryKey = 'blood_group_id';
+    // protected $primaryKey = 'blood_group_id'; // Default is 'id', which matches migration
 
     protected $fillable = [
         'blood_group_name',

@@ -27,6 +27,10 @@ class User extends Authenticatable
         'permanent_address',
         'latitude',
         'longitude',
+        'division_id',
+        'district_id',
+        'upazila_id',
+        'blood_group_id',
     ];
 
     /**
@@ -64,5 +68,10 @@ class User extends Authenticatable
     public function upazila()
     {
         return $this->belongsTo(Upazila::class);
+    }
+
+    public function bloodGroup()
+    {
+        return $this->belongsTo(BloodGroup::class);
     }
 }
