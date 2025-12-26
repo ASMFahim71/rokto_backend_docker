@@ -16,7 +16,7 @@ class ProfileController extends Controller
         // Donation count (from donor record if exists)
         $donor = Donor::where('user_id', $user->id)->first();
         $donationCount = $donor ? $donor->donation_count : 0;
-        $isAvailable = $donor ? $donor->is_available : false;
+        // $isAvailable = $donor ? $donor->is_available : false;
 
         // Request count (from blood_orders where requester is user)
         $requestCount = Order::where('requester_id', $user->id)->count();
@@ -24,7 +24,7 @@ class ProfileController extends Controller
         return response()->json([
             'donation_count' => $donationCount,
             'request_count' => $requestCount,
-            'is_available' => $isAvailable,
+            //'is_available' => $isAvailable,
         ]);
     }
 

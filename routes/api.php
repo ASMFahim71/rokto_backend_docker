@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\BloodOrderController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\DonorController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -17,8 +19,8 @@ Route::post('/districts/{districtId}/upazilas', [AddressController::class, 'upaz
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-profile', [AuthController::class, 'updateprofile']);
-    Route::post('/update-last-donation', [\App\Http\Controllers\Api\DonorController::class, 'updateLastDonation']);
+    Route::post('/update-last-donation', [DonorController::class, 'updateLastDonation']);
 
-    Route::get('/profile', [\App\Http\Controllers\Api\ProfileController::class, 'index']);
-    Route::post('/profile/status', [\App\Http\Controllers\Api\ProfileController::class, 'status']);
+    Route::post('/profile', [ProfileController::class, 'index']);
+    Route::post('/profile/status', [ProfileController::class, 'status']);
 });
