@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +27,10 @@ class User extends Authenticatable
         'permanent_address',
         'latitude',
         'longitude',
+        'division_id',
+        'district_id',
+        'upazila_id',
+        'blood_group_id',
     ];
 
     /**
@@ -50,5 +54,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function upazila()
+    {
+        return $this->belongsTo(Upazila::class);
+    }
+
+    public function bloodGroup()
+    {
+        return $this->belongsTo(BloodGroup::class);
     }
 }
