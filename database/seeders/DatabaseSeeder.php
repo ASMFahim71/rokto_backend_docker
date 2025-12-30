@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             DivisionSeeder::class,
             DistrictSeeder::class,
             ThanaSeeder::class,
+            UserDonorSeeder::class,
         ]);
     }
 }

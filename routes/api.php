@@ -20,7 +20,9 @@ Route::post('/districts/{districtId}/upazilas', [AddressController::class, 'upaz
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-profile', [AuthController::class, 'updateprofile']);
     Route::post('/update-last-donation', [DonorController::class, 'updateLastDonation']);
-
+    Route::post('/find-donors', [DonorController::class, 'findDonors']);
+    Route::post('/create-blood-order', [BloodOrderController::class, 'store']);
+    Route::post('/own-requests', [BloodOrderController::class, 'ownRequests']);
     Route::post('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/status', [ProfileController::class, 'status']);
 });

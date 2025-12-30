@@ -21,6 +21,11 @@ class Order extends Model
         'cause',
         'place',
         'gender',
+        'hospital_name',
+        'contact_number',
+        'division_id',
+        'district_id',
+        'upazila_id',
     ];
 
     protected $casts = [
@@ -35,6 +40,21 @@ class Order extends Model
     public function bloodGroup()
     {
         return $this->belongsTo(BloodGroup::class, 'blood_group_id');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'division_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
+
+    public function upazila()
+    {
+        return $this->belongsTo(Upazila::class, 'upazila_id');
     }
 }
     
