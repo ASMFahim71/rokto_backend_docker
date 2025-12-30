@@ -13,7 +13,18 @@ class BloodOrderController extends Controller
      */
     public function orders()
     {
-        $orders = Order::orderBy('date','desc')->whereDate('date','>=',now()->toDateString())->get();
+        $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
+            ->orderBy('date','desc')
+            ->whereDate('date','>=',now()->toDateString())
+            ->get()
+            ->map(function ($order) {
+                $order->division_name = $order->division->name ?? null;
+                $order->district_name = $order->district->name ?? null;
+                $order->upazila_name = $order->upazila->name ?? null;
+                $order->blood_group_name = $order->bloodGroup->blood_group_name ?? null;
+                unset($order->division, $order->district, $order->upazila, $order->bloodGroup);
+                return $order;
+            });
         return response()->json([
             'code'=>200,
             'message'=>'Orders fetched successfully',
@@ -26,7 +37,18 @@ class BloodOrderController extends Controller
      */
     public function ownRequests()
     {
-        $orders = Order::where('requester_id', auth()->id())->orderBy('date','desc')->get();
+        $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
+            ->where('requester_id', auth()->id())
+            ->orderBy('date','desc')
+            ->get()
+            ->map(function ($order) {
+                $order->division_name = $order->division->name ?? null;
+                $order->district_name = $order->district->name ?? null;
+                $order->upazila_name = $order->upazila->name ?? null;
+                $order->blood_group_name = $order->bloodGroup->blood_group_name ?? null;
+                unset($order->division, $order->district, $order->upazila, $order->bloodGroup);
+                return $order;
+            });
         return response()->json([
             'code'=>200,
             'message'=>'Orders fetched successfully',
@@ -75,6 +97,13 @@ class BloodOrderController extends Controller
                 'place' => $request->place,
                 'gender' => $request->gender, // Optional as per schema
             ]);
+            
+            $order->load(['division', 'district', 'upazila', 'bloodGroup']);
+            $order->division_name = $order->division->name ?? null;
+            $order->district_name = $order->district->name ?? null;
+            $order->upazila_name = $order->upazila->name ?? null;
+            $order->blood_group_name = $order->bloodGroup->blood_group_name ?? null;
+            unset($order->division, $order->district, $order->upazila, $order->bloodGroup);
 
             return response()->json([
                 'code' => 201,
