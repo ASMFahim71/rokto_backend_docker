@@ -14,6 +14,7 @@ class BloodOrderController extends Controller
     public function orders()
     {
         $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
+            ->where('requester_id', '!=', auth()->id())
             ->orderBy('date', 'desc')
             ->whereDate('date', '>=', now()->toDateString())
             ->get()

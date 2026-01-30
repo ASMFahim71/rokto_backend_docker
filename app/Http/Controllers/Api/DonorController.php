@@ -67,6 +67,9 @@ class DonorController extends Controller
             ->where('donors.is_available', 1)
             ->whereDate('donors.last_donation_date', '<=', now()->subDays(90))
             ->where('users.upazila_id', $user->upazila_id)
+            ->when($request->blood_group_id, function ($query) use ($request) {
+                return $query->where('donors.blood_group_id', $request->blood_group_id);
+            })
             ->with([
                 'user:id,name,phone,division_id,district_id,upazila_id',
                 'user.division:id,name',

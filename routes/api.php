@@ -11,13 +11,14 @@ use App\Http\Controllers\Api\DonorController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/orders', [BloodOrderController::class, 'orders']);
+
 
 Route::post('/divisions', [AddressController::class, 'divisions']);
 Route::post('/divisions/{divisionId}/districts', [AddressController::class, 'districts']);
 Route::post('/districts/{districtId}/upazilas', [AddressController::class, 'upazilas']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/orders', [BloodOrderController::class, 'orders']);
     Route::post('/update-profile', [AuthController::class, 'updateprofile']);
     Route::post('/update-last-donation', [DonorController::class, 'updateLastDonation']);
     Route::post('/find-donors', [DonorController::class, 'findDonors']);
