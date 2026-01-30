@@ -62,7 +62,7 @@ class BloodOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = $request->validate([
             'blood_group_id' => 'required|exists:blood_groups,id',
             'division_id' => 'required|exists:divisions,id',
             'district_id' => 'required|exists:districts,id',
@@ -75,13 +75,13 @@ class BloodOrderController extends Controller
             'place' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'code' => 422,
-                'message' => 'Validation Error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'code' => 422,
+        //         'message' => 'Validation Error',
+        //         'errors' => $validator->errors()
+        //     ], 422);
+        // }
 
         try {
             $order = Order::create([
