@@ -14,8 +14,8 @@ class BloodOrderController extends Controller
     public function orders()
     {
         $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
-            ->orderBy('date','desc')
-            ->whereDate('date','>=',now()->toDateString())
+            ->orderBy('date', 'desc')
+            ->whereDate('date', '>=', now()->toDateString())
             ->get()
             ->map(function ($order) {
                 $order->division_name = $order->division->name ?? null;
@@ -26,10 +26,10 @@ class BloodOrderController extends Controller
                 return $order;
             });
         return response()->json([
-            'code'=>200,
-            'message'=>'Orders fetched successfully',
-            'data'=>$orders
-        ],200);
+            'code' => 200,
+            'message' => 'Orders fetched successfully',
+            'data' => $orders
+        ], 200);
     }
 
     /**
@@ -39,7 +39,7 @@ class BloodOrderController extends Controller
     {
         $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
             ->where('requester_id', auth()->id())
-            ->orderBy('date','desc')
+            ->orderBy('date', 'desc')
             ->get()
             ->map(function ($order) {
                 $order->division_name = $order->division->name ?? null;
@@ -50,10 +50,10 @@ class BloodOrderController extends Controller
                 return $order;
             });
         return response()->json([
-            'code'=>200,
-            'message'=>'Orders fetched successfully',
-            'data'=>$orders
-        ],200);
+            'code' => 200,
+            'message' => 'Orders fetched successfully',
+            'data' => $orders
+        ], 200);
     }
 
     /**
@@ -97,7 +97,7 @@ class BloodOrderController extends Controller
                 'place' => $request->place,
                 'gender' => $request->gender, // Optional as per schema
             ]);
-            
+
             $order->load(['division', 'district', 'upazila', 'bloodGroup']);
             $order->division_name = $order->division->name ?? null;
             $order->district_name = $order->district->name ?? null;

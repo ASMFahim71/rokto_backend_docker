@@ -29,11 +29,6 @@ class DonorController extends Controller
             ['user_id' => $user->id],
             [
                 'last_donation_date' => $request->last_donation_date,
-                // If creating for the first time, we might want to set blood_group_id from user if available, 
-                // but since the user table has it now, maybe we should sync it or just rely on user table.
-                // However, the donors table has a blood_group_id column as per schema.
-                // Let's assume we should sync it if user has it, or require it. 
-                // For now, I'll update it if the user has it set.
                 'blood_group_id' => $user->blood_group_id,
             ]
         );
@@ -50,65 +45,38 @@ class DonorController extends Controller
     public function findDonors(Request $request)
     {
         $user = $request->user();
-        $latitude = null;
-        $longitude = null;
 
-        // Determine reference location: Upazila -> District
-        if ($user->upazila_id) {
-            $upazila = Upazila::find($user->upazila_id);
-            if ($upazila && $upazila->lat && $upazila->lon) {
-                $latitude = $upazila->lat;
-                $longitude = $upazila->lon;
-            }
+        if (!$user->upazila_id) {
+            return response()->json([
+                'code' => 200,
+                'message' => 'User location not set',
+                'data' => []
+            ], 200);
         }
 
-        if (!$latitude && $user->district_id) {
-            $district = District::find($user->district_id);
-            if ($district && $district->lat && $district->lon) {
-                $latitude = $district->lat;
-                $longitude = $district->lon;
-            }
-        }
-
-        $query = Donor::query()
+        $donors = Donor::query()
             ->select([
                 'donors.*',
                 'users.division_id',
                 'users.district_id',
                 'users.upazila_id',
-                'users.latitude as user_lat',
-                'users.longitude as user_lon'
+                // 'users.latitude as user_lat',
+                // 'users.longitude as user_lon'
             ])
             ->join('users', 'donors.user_id', '=', 'users.id')
             ->where('donors.is_available', 1)
             ->whereDate('donors.last_donation_date', '<=', now()->subDays(90))
+            ->where('users.upazila_id', $user->upazila_id)
             ->with([
                 'user:id,name,phone,division_id,district_id,upazila_id',
                 'user.division:id,name',
                 'user.district:id,name',
                 'user.upazila:id,name',
                 'bloodGroup:id,blood_group_name',
-            ]);
-
-        // If we have a valid reference location, calculate distance
-        if ($latitude && $longitude) {
-            $haversine = "(6371 * acos(cos(radians($latitude)) 
-                        * cos(radians(users.latitude)) 
-                        * cos(radians(users.longitude) - radians($longitude)) 
-                        + sin(radians($latitude)) 
-                        * sin(radians(users.latitude))))";
-            
-            $query->selectRaw("{$haversine} AS distance")
-                  ->orderByRaw('distance IS NULL, distance ASC');
-        } else {
-            // Fallback sorting if no location found
-            $query->orderBy('users.division_id')
-                  ->orderBy('users.district_id')
-                  ->orderBy('users.upazila_id');
-        }
-
-        $donors = $query->orderBy('donors.last_donation_date', 'asc')
-                        ->get();
+            ])
+            ->orderBy('donors.last_donation_date', 'asc')
+            ->limit(10)
+            ->get();
 
         return response()->json([
             'code' => 200,
@@ -116,6 +84,8 @@ class DonorController extends Controller
             'data' => $donors
         ], 200);
     }
+
+
     public function findDonorsByLocation(Request $request)
     {
         $donors = Donor::query()
@@ -160,11 +130,10 @@ class DonorController extends Controller
             ->orderBy('donors.last_donation_date', 'asc')
             ->get();
 
-    return response()->json([
-        'code' => 200,
-        'message' => 'Donors fetched successfully',
-        'data' => $donors
-    ], 200);
-}
-
+        return response()->json([
+            'code' => 200,
+            'message' => 'Donors fetched successfully',
+            'data' => $donors
+        ], 200);
+    }
 }
