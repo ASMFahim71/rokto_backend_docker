@@ -13,7 +13,7 @@ return new class extends Migration
 {
     Schema::create('donors', function (Blueprint $table) {
         $table->id('donor_id');
-        $table->unsignedBigInteger('user_id')->unique();
+        $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
         $table->foreignId('blood_group_id')->constrained('blood_groups')->cascadeOnDelete();
         $table->date('last_donation_date')->nullable();
         $table->integer('donation_count')->default(0);
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doners');
+        Schema::dropIfExists('donors');
     }
 };
