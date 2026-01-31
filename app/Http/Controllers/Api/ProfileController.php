@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Donor;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -25,6 +26,17 @@ class ProfileController extends Controller
             'donation_count' => $donationCount,
             'request_count' => $requestCount,
             //'is_available' => $isAvailable,
+        ]);
+    }
+
+    public function lastDonate(Request $request)
+    {
+        $user = $request->user();
+        $donor = Donor::where('user_id', $user->id)->first();
+        $donor->last_donation_date = $request->last_donate;
+        $donor->save();
+        return response()->json([
+            'message' => 'Last donate updated successfully',
         ]);
     }
 
@@ -50,19 +62,32 @@ class ProfileController extends Controller
                 'rating' => 0,
                 'is_available' => false
             ]
-        );
+            );
 
-        // If it was just created, we set it. If it existed, we toggle it.
-        // Wait, the detailed logic: 
-        // If created just now, we set values. 
-        // If we want to strictly toggle:
+        $requestedStatus = $request->is_available;
 
-        $donor->is_available = !$donor->is_available;
-        $donor->save();
-
-        return response()->json([
-            'message' => 'Status updated successfully',
-            'is_available' => $donor->is_available,
-        ]);
+        // Turning OFF → always allowed
+        if ($requestedStatus == false) {
+            $donor->is_available = false;
+            $donor->save();
+            return response()->json([
+                'message' => 'Availability turned off',
+            ]);
+        }
+        $lastDonate = Carbon::parse($donor->last_donation_date);
+        // Turning ON → validate 3 months rule
+        if ($lastDonate->lte(now()->subMonths(3))) {
+            $donor->is_available = true;
+            $donor->save();
+            return response()->json([
+                'message' => 'Availability turned on',
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'message' => 'You can not turn on availability',
+            ], 422);
+        }
     }
 }
