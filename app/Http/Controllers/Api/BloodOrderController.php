@@ -13,8 +13,10 @@ class BloodOrderController extends Controller
      */
     public function orders()
     {
+        $user_district=auth()->user()->district_id;
         $orders = Order::with(['division', 'district', 'upazila', 'bloodGroup'])
             ->where('requester_id', '!=', auth()->id())
+            ->where('district_id',$user_district)
             ->orderBy('date','desc')
             ->whereDate('date','>=',now()->toDateString())
             ->where('is_managed',false)
