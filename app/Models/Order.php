@@ -26,6 +26,7 @@ class Order extends Model
         'division_id',
         'district_id',
         'upazila_id',
+        'is_managed',
     ];
 
     protected $casts = [
