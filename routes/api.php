@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/find-donors-by-location', [DonorController::class, 'findDonorsByLocation']);
     Route::post('/create-blood-order', [BloodOrderController::class, 'store']);
     Route::post('/own-requests', [BloodOrderController::class, 'ownRequests']);
+    Route::post('/update-request-status',[BloodOrderController::class,'upDateOwnRequestStatus']);
     Route::post('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/status', [ProfileController::class, 'status']);
 });

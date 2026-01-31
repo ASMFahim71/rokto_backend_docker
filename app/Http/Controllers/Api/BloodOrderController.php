@@ -17,6 +17,7 @@ class BloodOrderController extends Controller
             ->where('requester_id', '!=', auth()->id())
             ->orderBy('date','desc')
             ->whereDate('date','>=',now()->toDateString())
+            ->where('is_managed',false)
             ->get()
             ->map(function ($order) {
                 $order->division_name = $order->division->name ?? null;
@@ -119,7 +120,26 @@ class BloodOrderController extends Controller
             ], 500);
         }
     }
-
+    public function upDateOwnRequestStatus(Request $request)
+    {
+        $order_id=$request->order_id;
+        $status=$request->status;
+        $order=Order::find($order_id);
+        if($order){
+            $order->update([
+                'is_managed'=>$status==1?true:false
+            ]);
+            return response()->json([
+                'code'=>200,
+                'message'=>'Request status updated successfully',
+                'data'=>$order
+            ],200);
+        }
+        return response()->json([
+            'code'=>404,
+            'message'=>'Request not found',
+        ],404);
+    }
     /**
      * Display the specified resource.
      */
