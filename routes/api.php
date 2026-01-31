@@ -28,4 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/update-request-status',[BloodOrderController::class,'upDateOwnRequestStatus']);
     Route::post('/profile', [ProfileController::class, 'index']);
     Route::post('/profile/status', [ProfileController::class, 'status']);
+    Route::post('/profile/last-donate', [ProfileController::class, 'lastDonate']);
 });

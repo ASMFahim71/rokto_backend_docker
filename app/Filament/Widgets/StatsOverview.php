@@ -27,16 +27,28 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-users')
                 ->chart($userTrend)
                 ->color('success'),
-            Stat::make('Active Blood Requests', Order::where('date', '>=', now()->toDateString())->count())
-                ->description('Pending and upcoming')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart($requestTrend)
-                ->color('danger'),
-            Stat::make('Available Donors', Donor::where('is_available', true)->count())
-                ->description('Ready to donate')
+            Stat::make('Total Donors', Donor::count())
+                ->description('All registered donors')
                 ->descriptionIcon('heroicon-m-heart')
                 ->chart($donorTrend)
                 ->color('primary'),
+            Stat::make('Available Donors', Donor::where('is_available', true)->count())
+                ->description('Ready to donate')
+                ->descriptionIcon('heroicon-m-hand-thumb-up')
+                ->color('success'),
+            Stat::make('Active Requests', Order::active()->count())
+                ->description('Pending and upcoming')
+                ->descriptionIcon('heroicon-m-clock')
+                ->chart($requestTrend)
+                ->color('warning'),
+            Stat::make('Managed Requests', Order::managed()->count())
+                ->description('Successfully managed')
+                ->descriptionIcon('heroicon-m-check-circle')
+                ->color('success'),
+            Stat::make('Expired Requests', Order::expired()->count())
+                ->description('Time passed unmanaged')
+                ->descriptionIcon('heroicon-m-x-circle')
+                ->color('danger'),
         ];
     }
 

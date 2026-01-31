@@ -75,11 +75,17 @@ class BloodRequestForm
                                     ->required()
                                     ->columnSpanFull(),
                             ]),
+                        Grid::make(1)
+                            ->schema([
+                                \Filament\Forms\Components\Toggle::make('is_managed')
+                                    ->required()
+                                    ->label('Is Managed'),
+                            ]),
                     ]),
                 Section::make('Location')
                     ->icon('heroicon-m-map-pin')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(1)
                             ->schema([
                                 Select::make('division_id')
                                     ->label('Division')

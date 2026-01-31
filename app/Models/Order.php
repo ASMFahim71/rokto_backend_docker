@@ -57,5 +57,46 @@ class Order extends Model
     {
         return $this->belongsTo(Upazila::class, 'upazila_id');
     }
+
+    public function getStatusAttribute(): string
+    {
+        if ($this->is_managed) {
+            return 'Managed';
+        }
+
+        $orderDateTime = \Carbon\Carbon::parse($this->date->format('Y-m-d') . ' ' . $this->time);
+
+        if ($orderDateTime->isPast()) {
+            return 'Expired';
+        }
+
+        return 'Pending';
+    }
+
+    public function scopeManaged($query)
+    {
+        return $query->where('is_managed', true);
+    }
+
+    public function scopeExpired($query)
+    {
+        return $query->where('is_managed', false)->where(function ($q) {
+            $q->where('date', '<', now()->toDateString())
+                ->orWhere(function ($q) {
+                    $q->where('date', '=', now()->toDateString())
+                        ->where('time', '<', now()->format('H:i:s'));
+                });
+        });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_managed', false)->where(function ($q) {
+            $q->where('date', '>', now()->toDateString())
+                ->orWhere(function ($q) {
+                    $q->where('date', '=', now()->toDateString())
+                        ->where('time', '>=', now()->format('H:i:s'));
+                });
+        });
+    }
 }
-    

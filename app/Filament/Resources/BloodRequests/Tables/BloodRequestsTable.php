@@ -41,6 +41,13 @@ class BloodRequestsTable
                 TextColumn::make('division.name')
                     ->label('Location')
                     ->description(fn(Model $record) => "{$record->district?->name}, {$record->upazila?->name}"),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Managed' => 'success',
+                        'Expired' => 'danger',
+                        'Pending' => 'warning',
+                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
